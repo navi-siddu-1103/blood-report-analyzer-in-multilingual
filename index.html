@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Report Analyzer</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f0f0;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #0066ff 0%, #0052cc 100%);
+            color: white;
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header-icon {
+            font-size: 32px;
+        }
+
+        .header-title {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        /* Language Dropdown */
+        .language-selector {
+            position: relative;
+        }
+
+        .language-btn {
+            background: white;
+            color: #333;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+        }
+
+        .language-btn:hover {
+            background: #f5f5f5;
+        }
+
+        .language-dropdown {
+            position: absolute;
+            top: 50px;
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            min-width: 150px;
+            display: none;
+            z-index: 1000;
+        }
+
+        .language-dropdown.show {
+            display: block;
+        }
+
+        .language-option {
+            padding: 12px 20px;
+            cursor: pointer;
+            color: #333;
+            transition: background 0.2s;
+        }
+
+        .language-option:hover {
+            background: #e8f2ff;
+        }
+
+        .language-option.active {
+            background: #0066ff;
+            color: white;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 60px 20px 40px;
+            background: linear-gradient(to bottom, #f8f9fa, #ffffff);
+        }
+
+        .hero-icon {
+            font-size: 80px;
+            color: #0066ff;
+            margin-bottom: 20px;
+        }
+
+        .hero-title {
+            font-size: 48px;
+            color: #0066ff;
+            margin-bottom: 15px;
+            font-weight: 300;
+        }
+
+        .hero-subtitle {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 40px;
+        }
+
+        /* Cards Container */
+        .cards-container {
+            max-width: 1200px;
+            margin: 50px auto 0;
+            padding: 0 20px 60px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 40px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 50px 40px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 25px rgba(0,0,0,0.12);
+        }
+
+        .card-icon {
+            font-size: 80px;
+            margin-bottom: 25px;
+        }
+
+        .card-icon.upload {
+            color: #0066ff;
+        }
+
+        .card-icon.manual {
+            color: #28a745;
+        }
+
+        .card-title {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .card-description {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: #0066ff;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #0052cc;
+            transform: scale(1.05);
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+            transform: scale(1.05);
+        }
+
+        /* Features Section */
+        .features {
+            background: white;
+            padding: 60px 20px;
+        }
+
+        .features-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        .feature {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .feature-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+
+        .feature-icon.analysis {
+            color: #00bcd4;
+        }
+
+        .feature-icon.recommendations {
+            color: #ffc107;
+        }
+
+        .feature-icon.multilang {
+            color: #e74c3c;
+        }
+
+        .feature-title {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .feature-description {
+            font-size: 16px;
+            color: #666;
+        }
+
+        /* Footer */
+        .footer {
+            background: #2c2c2c;
+            color: white;
+            text-align: center;
+            padding: 50px 20px 30px;
+            margin-top: 50px;
+            clear: both;
+        }
+
+        .footer-features {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 80px;
+            margin-bottom: 40px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .footer-feature {
+            flex: 1;
+            max-width: 300px;
+            text-align: center;
+        }
+
+        .footer-feature-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .footer-feature-icon.analysis {
+            color: #4FC3F7;
+        }
+
+        .footer-feature-icon.recommendations {
+            color: #FFD54F;
+        }
+
+        .footer-feature-icon.multilang {
+            color: #FF7043;
+        }
+
+        .footer-feature-title {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: white;
+        }
+
+        .footer-feature-description {
+            font-size: 16px;
+            color: #ccc;
+            line-height: 1.5;
+        }
+
+        .footer-divider {
+            height: 1px;
+            background: #444;
+            margin: 30px auto;
+            max-width: 800px;
+        }
+
+        .footer-text {
+            margin-bottom: 10px;
+        }
+
+        .footer-privacy {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            color: #ccc;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .footer-features {
+                flex-direction: column;
+                gap: 40px;
+            }
+            
+            .footer-feature {
+                max-width: 100%;
+            }
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .close-btn:hover {
+            color: #333;
+        }
+
+        .file-upload-area {
+            border: 3px dashed #ddd;
+            border-radius: 12px;
+            padding: 60px 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 20px;
+        }
+
+        .file-upload-area:hover {
+            border-color: #0066ff;
+            background: #f8f9fa;
+        }
+
+        .file-upload-area.dragover {
+            border-color: #0066ff;
+            background: #e8f2ff;
+        }
+
+        .upload-icon {
+            font-size: 60px;
+            color: #0066ff;
+            margin-bottom: 20px;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .file-name {
+            margin-top: 15px;
+            color: #28a745;
+            font-weight: 600;
+        }
+
+        .analyze-btn {
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        /* Manual Entry Form */
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #0066ff;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #0066ff;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Results */
+        .results-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .results-header {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .results-title {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .overall-status {
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .results-table {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+
+        .table-header {
+            background: #0066ff;
+            color: white;
+            padding: 20px;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 16px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #555;
+            text-transform: uppercase;
+            font-size: 12px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .status-normal {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-high {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-low {
+            background: #cfe2ff;
+            color: #084298;
+        }
+
+        .recommendations-section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .recommendations-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .recommendation-item {
+            padding: 15px;
+            background: #e8f2ff;
+            border-left: 4px solid #0066ff;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                padding: 40px 20px 30px;
+            }
+            
+            .hero-title {
+                font-size: 36px;
+            }
+            
+            .cards-container {
+                grid-template-columns: 1fr;
+                margin-top: 30px;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-left">
+            <i class="fas fa-heartbeat header-icon"></i>
+            <span class="header-title" id="headerTitle">Blood Report Analyzer</span>
+        </div>
+        <div class="language-selector">
+            <button class="language-btn" id="languageBtn">
+                <i class="fas fa-globe"></i>
+                <span id="currentLanguage">English</span>
+                <i class="fas fa-chevron-down"></i>
+            </button>
+            <div class="language-dropdown" id="languageDropdown">
+                <div class="language-option active" data-lang="english">English</div>
+                <div class="language-option" data-lang="hindi">हिंदी</div>
+                <div class="language-option" data-lang="kannada">ಕನ್ನಡ</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <div class="hero">
+        <i class="fas fa-heart-pulse hero-icon"></i>
+        <h1 class="hero-title" id="heroTitle">Welcome to Blood Report Analyzer</h1>
+        <p class="hero-subtitle" id="heroSubtitle">Get detailed analysis of your blood report and health recommendations</p>
+    </div>
+
+    <!-- Cards Section -->
+    <div class="cards-container">
+        <div class="card">
+            <i class="fas fa-cloud-upload-alt card-icon upload"></i>
+            <h2 class="card-title" id="uploadTitle">Upload Blood Report</h2>
+            <p class="card-description" id="uploadDesc">Upload your blood report PDF, image, or text file</p>
+            <button class="btn btn-primary" id="uploadBtn">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <span id="uploadBtnText">Upload File</span>
+            </button>
+        </div>
+
+        <div class="card">
+            <i class="fas fa-keyboard card-icon manual"></i>
+            <h2 class="card-title" id="manualTitle">Manual Entry</h2>
+            <p class="card-description" id="manualDesc">Enter blood parameter values manually</p>
+            <button class="btn btn-success" id="manualBtn">
+                <i class="fas fa-edit"></i>
+                <span id="manualBtnText">Manual Entry</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="features">
+        <div class="features-container">
+            <div class="feature">
+                <i class="fas fa-chart-line feature-icon analysis"></i>
+                <h3 class="feature-title" id="featureTitle1">Detailed Analysis</h3>
+                <p class="feature-description" id="featureDesc1">Comprehensive examination and interpretation of all blood parameters</p>
+            </div>
+            <div class="feature">
+                <i class="fas fa-lightbulb feature-icon recommendations"></i>
+                <h3 class="feature-title" id="featureTitle2">Health Recommendations</h3>
+                <p class="feature-description" id="featureDesc2">Personalized suggestions for health improvement</p>
+            </div>
+            <div class="feature">
+                <i class="fas fa-globe feature-icon multilang"></i>
+                <h3 class="feature-title" id="featureTitle3">Multi-language Support</h3>
+                <p class="feature-description" id="featureDesc3">Available in English, Hindi, and Kannada</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Container -->
+    <div class="results-container" id="resultsContainer" style="display: none;">
+        <!-- Results will be inserted here -->
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <!-- Footer Features Section -->
+        <div class="footer-features">
+            <div class="footer-feature">
+                <i class="fas fa-chart-line footer-feature-icon analysis"></i>
+                <h3 class="footer-feature-title">Detailed Analysis</h3>
+                <p class="footer-feature-description">Comprehensive examination and interpretation of all blood parameters</p>
+            </div>
+            <div class="footer-feature">
+                <i class="fas fa-lightbulb footer-feature-icon recommendations"></i>
+                <h3 class="footer-feature-title">Health Recommendations</h3>
+                <p class="footer-feature-description">Personalized suggestions for health improvement</p>
+            </div>
+            <div class="footer-feature">
+                <i class="fas fa-globe footer-feature-icon multilang"></i>
+                <h3 class="footer-feature-title">Multi-language Support</h3>
+                <p class="footer-feature-description">Available in English, Hindi, and Kannada</p>
+            </div>
+        </div>
+        
+        <!-- Footer Divider -->
+        <div class="footer-divider"></div>
+        
+        <!-- Copyright and Privacy -->
+        <p class="footer-text">© 2025 Blood Report Analyzer. All rights reserved.</p>
+        <div class="footer-privacy">
+            <i class="fas fa-shield-alt"></i>
+            <span>Your health data is processed securely and privately.</span>
+        </div>
+    </div>
+
+    <!-- Upload Modal -->
+    <div class="modal" id="uploadModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalUploadTitle">Upload Blood Report</h2>
+                <button class="close-btn" onclick="closeModal('uploadModal')">&times;</button>
+            </div>
+            <div class="file-upload-area" id="fileUploadArea">
+                <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                <p id="uploadInstruction">Click to upload or drag and drop</p>
+                <p style="color: #999; font-size: 14px;" id="uploadFormats">PDF, JPG, PNG files supported</p>
+                <input type="file" id="fileInput" class="file-input" accept=".pdf,.jpg,.jpeg,.png">
+                <p class="file-name" id="fileName"></p>
+            </div>
+            <button class="btn btn-primary analyze-btn" id="analyzeFileBtn" style="display: none;">
+                <i class="fas fa-search"></i>
+                <span id="analyzeText">Analyze Report</span>
+            </button>
+            <div class="loading" id="uploadLoading" style="display: none;">
+                <div class="spinner"></div>
+                <p id="analyzingText">Analyzing your report...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Manual Entry Modal -->
+    <div class="modal" id="manualModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalManualTitle">Manual Entry</h2>
+                <button class="close-btn" onclick="closeModal('manualModal')">&times;</button>
+            </div>
+            <form id="manualForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" id="labelHb">Hemoglobin (g/dL)</label>
+                        <input type="number" step="0.1" class="form-input" name="hemoglobin" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" id="labelWbc">WBC Count (/μL)</label>
+                        <input type="number" class="form-input" name="wbc" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" id="labelRbc">RBC Count (M/μL)</label>
+                        <input type="number" step="0.1" class="form-input" name="rbc" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" id="labelPlatelets">Platelet Count (/μL)</label>
+                        <input type="number" class="form-input" name="platelets" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" id="labelGlucose">Blood Glucose (mg/dL)</label>
+                        <input type="number" class="form-input" name="glucose" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" id="labelCholesterol">Total Cholesterol (mg/dL)</label>
+                        <input type="number" class="form-input" name="cholesterol" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" id="labelHdl">HDL Cholesterol (mg/dL)</label>
+                        <input type="number" class="form-input" name="hdl" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" id="labelLdl">LDL Cholesterol (mg/dL)</label>
+                        <input type="number" class="form-input" name="ldl" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" id="labelTriglycerides">Triglycerides (mg/dL)</label>
+                        <input type="number" class="form-input" name="triglycerides" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" id="labelCreatinine">Creatinine (mg/dL)</label>
+                        <input type="number" step="0.1" class="form-input" name="creatinine" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-success analyze-btn">
+                    <i class="fas fa-search"></i>
+                    <span id="manualAnalyzeText">Analyze</span>
+                </button>
+            </form>
+            <div class="loading" id="manualLoading" style="display: none;">
+                <div class="spinner"></div>
+                <p id="manualAnalyzingText">Analyzing your data...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const translations = {
+            english: {
+                headerTitle: "Blood Report Analyzer",
+                currentLanguage: "English",
+                heroTitle: "Welcome to Blood Report Analyzer",
+                heroSubtitle: "Get detailed analysis of your blood report and health recommendations",
+                uploadTitle: "Upload Blood Report",
+                uploadDesc: "Upload your blood report PDF, image, or text file",
+                uploadBtnText: "Upload File",
+                manualTitle: "Manual Entry",
+                manualDesc: "Enter blood parameter values manually",
+                manualBtnText: "Manual Entry",
+                featureTitle1: "Detailed Analysis",
+                featureDesc1: "Comprehensive examination and interpretation of all blood parameters",
+                featureTitle2: "Health Recommendations",
+                featureDesc2: "Personalized suggestions for health improvement",
+                featureTitle3: "Multi-language Support",
+                featureDesc3: "Available in English, Hindi, and Kannada",
+                modalUploadTitle: "Upload Blood Report",
+                uploadInstruction: "Click to upload or drag and drop",
+                uploadFormats: "PDF, JPG, PNG files supported",
+                analyzeText: "Analyze Report",
+                analyzingText: "Analyzing your report...",
+                modalManualTitle: "Manual Entry",
+                manualAnalyzeText: "Analyze",
+                manualAnalyzingText: "Analyzing your data...",
+                parameters: "Blood Parameters",
+                status: "Status",
+                value: "Value",
+                normalRange: "Normal Range",
+                recommendations: "Health Recommendations",
+                overallHealth: "Overall Health Status",
+                normal: "Normal",
+                high: "High",
+                low: "Low"
+            },
+            hindi: {
+                headerTitle: "रक्त रिपोर्ट विश्लेषक",
+                currentLanguage: "हिंदी",
+                heroTitle: "रक्त रिपोर्ट विश्लेषक में आपका स्वागत है",
+                heroSubtitle: "अपनी रक्त रिपोर्ट का विस्तृत विश्लेषण और स्वास्थ्य सुझाव प्राप्त करें",
+                uploadTitle: "रक्त रिपोर्ट अपलोड करें",
+                uploadDesc: "अपनी रक्त रिपोर्ट PDF, इमेज या टेक्स्ट फ़ाइल अपलोड करें",
+                uploadBtnText: "फ़ाइल अपलोड करें",
+                manualTitle: "मैन्युअल प्रविष्टि",
+                manualDesc: "रक्त पैरामीटर मान मैन्युअल रूप से दर्ज करें",
+                manualBtnText: "मैन्युअल प्रविष्टि",
+                featureTitle1: "विस्तृत विश्लेषण",
+                featureDesc1: "सभी रक्त पैरामीटर की व्यापक जांच और व्याख्या",
+                featureTitle2: "स्वास्थ्य सुझाव",
+                featureDesc2: "स्वास्थ्य सुधार के लिए व्यक्तिगत सुझाव",
+                featureTitle3: "बहु-भाषा समर्थन",
+                featureDesc3: "अंग्रेजी, हिंदी और कन्नड़ में उपलब्ध",
+                modalUploadTitle: "रक्त रिपोर्ट अपलोड करें",
+                uploadInstruction: "अपलोड करने के लिए क्लिक करें या ड्रैग एंड ड्रॉप करें",
+                uploadFormats: "PDF, JPG, PNG फ़ाइलें समर्थित हैं",
+                analyzeText: "रिपोर्ट का विश्लेषण करें",
+                analyzingText: "आपकी रिपोर्ट का विश्लेषण किया जा रहा है...",
+                modalManualTitle: "मैन्युअल प्रविष्टि",
+                manualAnalyzeText: "विश्लेषण करें",
+                manualAnalyzingText: "आपके डेटा का विश्लेषण किया जा रहा है...",
+                parameters: "रक्त पैरामीटर",
+                status: "स्थिति",
+                value: "मान",
+                normalRange: "सामान्य सीमा",
+                recommendations: "स्वास्थ्य सुझाव",
+                overallHealth: "समग्र स्वास्थ्य स्थिति",
+                normal: "सामान्य",
+                high: "उच्च",
+                low: "निम्न"
+            },
+            kannada: {
+                headerTitle: "ರಕ್ತ ವರದಿ ವಿಶ್ಲೇಷಕ",
+                currentLanguage: "ಕನ್ನಡ",
+                heroTitle: "ರಕ್ತ ವರದಿ ವಿಶ್ಲೇಷಕಕ್ಕೆ ಸ್ವಾಗತ",
+                heroSubtitle: "ನಿಮ್ಮ ರಕ್ತ ವರದಿಯ ವಿವರವಾದ ವಿಶ್ಲೇಷಣೆ ಮತ್ತು ಆರೋಗ್ಯ ಶಿಫಾರಸುಗಳನ್ನು ಪಡೆಯಿರಿ",
+                uploadTitle: "ರಕ್ತ ವರದಿ ಅಪ್‌ಲೋಡ್ ಮಾಡಿ",
+                uploadDesc: "ನಿಮ್ಮ ರಕ್ತ ವರದಿ PDF, ಚಿತ್ರ ಅಥವಾ ಪಠ್ಯ ಫೈಲ್ ಅಪ್‌ಲೋಡ್ ಮಾಡಿ",
+                uploadBtnText: "ಫೈಲ್ ಅಪ್‌ಲೋಡ್ ಮಾಡಿ",
+                manualTitle: "ಕೈಯಾರೆ ನಮೂದು",
+                manualDesc: "ರಕ್ತ ನಿಯತಾಂಕ ಮೌಲ್ಯಗಳನ್ನು ಕೈಯಾರೆ ನಮೂದಿಸಿ",
+                manualBtnText: "ಕೈಯಾರೆ ನಮೂದು",
+                featureTitle1: "ವಿವರವಾದ ವಿಶ್ಲೇಷಣೆ",
+                featureDesc1: "ಎಲ್ಲಾ ರಕ್ತ ನಿಯತಾಂಕಗಳ ಸಮಗ್ರ ಪರೀಕ್ಷೆ ಮತ್ತು ವ್ಯಾಖ್ಯಾನ",
+                featureTitle2: "ಆರೋಗ್ಯ ಶಿಫಾರಸುಗಳು",
+                featureDesc2: "ಆರೋಗ್ಯ ಸುಧಾರಣೆಗಾಗಿ ವೈಯಕ್ತಿಕ ಸಲಹೆಗಳು",
+                featureTitle3: "ಬಹು-ಭಾಷಾ ಬೆಂಬಲ",
+                featureDesc3: "ಇಂಗ್ಲಿಷ್, ಹಿಂದಿ ಮತ್ತು ಕನ್ನಡದಲ್ಲಿ ಲಭ್ಯವಿದೆ",
+                modalUploadTitle: "ರಕ್ತ ವರದಿ ಅಪ್‌ಲೋಡ್ ಮಾಡಿ",
+                uploadInstruction: "ಅಪ್‌ಲೋಡ್ ಮಾಡಲು ಕ್ಲಿಕ್ ಮಾಡಿ ಅಥವಾ ಡ್ರ್ಯಾಗ್ ಮತ್ತು ಡ್ರಾಪ್ ಮಾಡಿ",
+                uploadFormats: "PDF, JPG, PNG ಫೈಲ್‌ಗಳು ಬೆಂಬಲಿತವಾಗಿವೆ",
+                analyzeText: "ವರದಿ ವಿಶ್ಲೇಷಿಸಿ",
+                analyzingText: "ನಿಮ್ಮ ವರದಿಯನ್ನು ವಿಶ್ಲೇಷಿಸಲಾಗುತ್ತಿದೆ...",
+                modalManualTitle: "ಕೈಯಾರೆ ನಮೂದು",
+                manualAnalyzeText: "ವಿಶ್ಲೇಷಿಸಿ",
+                manualAnalyzingText: "ನಿಮ್ಮ ಡೇಟಾವನ್ನು ವಿಶ್ಲೇಷಿಸಲಾಗುತ್ತಿದೆ...",
+                parameters: "ರಕ್ತ ನಿಯತಾಂಕಗಳು",
+                status: "ಸ್ಥಿತಿ",
+                value: "ಮೌಲ್ಯ",
+                normalRange: "ಸಾಮಾನ್ಯ ವ್ಯಾಪ್ತಿ",
+                recommendations: "ಆರೋಗ್ಯ ಶಿಫಾರಸುಗಳು",
+                overallHealth: "ಒಟ್ಟಾರೆ ಆರೋಗ್ಯ ಸ್ಥಿತಿ",
+                normal: "ಸಾಮಾನ್ಯ",
+                high: "ಹೆಚ್ಚು",
+                low: "ಕಡಿಮೆ"
+            }
+        };
+
+        let currentLang = 'english';
+        let selectedFile = null;
+
+        // Language Dropdown Toggle
+        document.getElementById('languageBtn').addEventListener('click', function(e) {
+            e.stopPropagation();
+            document.getElementById('languageDropdown').classList.toggle('show');
+        });
+
+        document.addEventListener('click', function() {
+            document.getElementById('languageDropdown').classList.remove('show');
+        });
+
+        // Language Selection
+        document.querySelectorAll('.language-option').forEach(option => {
+            option.addEventListener('click', function() {
+                const lang = this.getAttribute('data-lang');
+                changeLanguage(lang);
+                
+                document.querySelectorAll('.language-option').forEach(opt => {
+                    opt.classList.remove('active');
+                });
+                this.classList.add('active');
+            });
+        });
+
+        function changeLanguage(lang) {
+            currentLang = lang;
+            const t = translations[lang];
+            
+            document.getElementById('headerTitle').textContent = t.headerTitle;
+            document.getElementById('currentLanguage').textContent = t.currentLanguage;
+            document.getElementById('heroTitle').textContent = t.heroTitle;
+            document.getElementById('heroSubtitle').textContent = t.heroSubtitle;
+            document.getElementById('uploadTitle').textContent = t.uploadTitle;
+            document.getElementById('uploadDesc').textContent = t.uploadDesc;
+            document.getElementById('uploadBtnText').textContent = t.uploadBtnText;
+            document.getElementById('manualTitle').textContent = t.manualTitle;
+            document.getElementById('manualDesc').textContent = t.manualDesc;
+            document.getElementById('manualBtnText').textContent = t.manualBtnText;
+            document.getElementById('featureTitle1').textContent = t.featureTitle1;
+            document.getElementById('featureDesc1').textContent = t.featureDesc1;
+            document.getElementById('featureTitle2').textContent = t.featureTitle2;
+            document.getElementById('featureDesc2').textContent = t.featureDesc2;
+            document.getElementById('featureTitle3').textContent = t.featureTitle3;
+            document.getElementById('featureDesc3').textContent = t.featureDesc3;
+            document.getElementById('modalUploadTitle').textContent = t.modalUploadTitle;
+            document.getElementById('uploadInstruction').textContent = t.uploadInstruction;
+            document.getElementById('uploadFormats').textContent = t.uploadFormats;
+            document.getElementById('analyzeText').textContent = t.analyzeText;
+            document.getElementById('analyzingText').textContent = t.analyzingText;
+            document.getElementById('modalManualTitle').textContent = t.modalManualTitle;
+            document.getElementById('manualAnalyzeText').textContent = t.manualAnalyzeText;
+            document.getElementById('manualAnalyzingText').textContent = t.manualAnalyzingText;
+        }
+
+        // Modal Functions
+        function showModal(modalId) {
+            document.getElementById(modalId).classList.add('show');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('show');
+        }
+
+        document.getElementById('uploadBtn').addEventListener('click', function() {
+            showModal('uploadModal');
+        });
+
+        document.getElementById('manualBtn').addEventListener('click', function() {
+            showModal('manualModal');
+        });
+
+        // File Upload
+        const fileUploadArea = document.getElementById('fileUploadArea');
+        const fileInput = document.getElementById('fileInput');
+
+        fileUploadArea.addEventListener('click', function() {
+            fileInput.click();
+        });
+
+        fileInput.addEventListener('change', function(e) {
+            if (e.target.files.length > 0) {
+                selectedFile = e.target.files[0];
+                document.getElementById('fileName').textContent = selectedFile.name;
+                document.getElementById('analyzeFileBtn').style.display = 'block';
+            }
+        });
+
+        // Drag and Drop
+        fileUploadArea.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            this.classList.add('dragover');
+        });
+
+        fileUploadArea.addEventListener('dragleave', function() {
+            this.classList.remove('dragover');
+        });
+
+        fileUploadArea.addEventListener('drop', function(e) {
+            e.preventDefault();
+            this.classList.remove('dragover');
+            
+            if (e.dataTransfer.files.length > 0) {
+                selectedFile = e.dataTransfer.files[0];
+                document.getElementById('fileName').textContent = selectedFile.name;
+                document.getElementById('analyzeFileBtn').style.display = 'block';
+            }
+        });
+
+        // Analyze File
+        document.getElementById('analyzeFileBtn').addEventListener('click', function() {
+            analyzeFile();
+        });
+
+        function analyzeFile() {
+            document.getElementById('uploadLoading').style.display = 'block';
+            document.getElementById('analyzeFileBtn').style.display = 'none';
+            
+            // Simulate API call
+            setTimeout(() => {
+                closeModal('uploadModal');
+                showResults(getSampleData());
+                document.getElementById('uploadLoading').style.display = 'none';
+                document.getElementById('analyzeFileBtn').style.display = 'block';
+            }, 2500);
+        }
+
+        // Manual Form Submit
+        document.getElementById('manualForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            document.getElementById('manualLoading').style.display = 'block';
+            this.style.display = 'none';
+            
+            const formData = new FormData(this);
+            const data = {
+                hemoglobin: parseFloat(formData.get('hemoglobin')),
+                wbc: parseInt(formData.get('wbc')),
+                rbc: parseFloat(formData.get('rbc')),
+                platelets: parseInt(formData.get('platelets')),
+                glucose: parseInt(formData.get('glucose')),
+                cholesterol: parseInt(formData.get('cholesterol')),
+                hdl: parseInt(formData.get('hdl')),
+                ldl: parseInt(formData.get('ldl')),
+                triglycerides: parseInt(formData.get('triglycerides')),
+                creatinine: parseFloat(formData.get('creatinine'))
+            };
+            
+            setTimeout(() => {
+                closeModal('manualModal');
+                showResults(analyzeManualData(data));
+                document.getElementById('manualLoading').style.display = 'none';
+                this.style.display = 'block';
+                this.reset();
+            }, 2500);
+        });
+
+        function analyzeManualData(data) {
+            const parameters = [
+                { name: 'Hemoglobin', nameHindi: 'हीमोग्लोबिन', nameKannada: 'ಹಿಮೋಗ್ಲೋಬಿನ್', value: data.hemoglobin, range: '12-16 g/dL', min: 12, max: 16 },
+                { name: 'WBC Count', nameHindi: 'WBC काउंट', nameKannada: 'WBC ಎಣಿಕೆ', value: data.wbc, range: '4000-11000 /μL', min: 4000, max: 11000 },
+                { name: 'RBC Count', nameHindi: 'RBC काउंट', nameKannada: 'RBC ಎಣಿಕೆ', value: data.rbc, range: '4.5-5.5 M/μL', min: 4.5, max: 5.5 },
+                { name: 'Platelet Count', nameHindi: 'प्लेटलेट काउंट', nameKannada: 'ಪ್ಲೇಟ್ಲೆಟ್ ಎಣಿಕೆ', value: data.platelets, range: '150000-400000 /μL', min: 150000, max: 400000 },
+                { name: 'Blood Glucose', nameHindi: 'रक्त शर्करा', nameKannada: 'ರಕ್ತದ ಸಕ್ಕರೆ', value: data.glucose, range: '70-100 mg/dL', min: 70, max: 100 },
+                { name: 'Total Cholesterol', nameHindi: 'कुल कोलेस्ट्रॉल', nameKannada: 'ಒಟ್ಟು ಕೊಲೆಸ್ಟರಾಲ್', value: data.cholesterol, range: '< 200 mg/dL', min: 0, max: 200 },
+                { name: 'HDL Cholesterol', nameHindi: 'HDL कोलेस्ट्रॉल', nameKannada: 'HDL ಕೊಲೆಸ್ಟರಾಲ್', value: data.hdl, range: '> 40 mg/dL', min: 40, max: 999, reverse: true },
+                { name: 'LDL Cholesterol', nameHindi: 'LDL कोलेस्ट्रॉल', nameKannada: 'LDL ಕೊಲೆಸ್ಟರಾಲ್', value: data.ldl, range: '< 100 mg/dL', min: 0, max: 100 },
+                { name: 'Triglycerides', nameHindi: 'ट्राइग्लिसराइड्स', nameKannada: 'ಟ್ರೈಗ್ಲಿಸರೈಡ್ಸ್', value: data.triglycerides, range: '< 150 mg/dL', min: 0, max: 150 },
+                { name: 'Creatinine', nameHindi: 'क्रिएटिनिन', nameKannada: 'ಕ್ರಿಯೇಟಿನೈನ್', value: data.creatinine, range: '0.7-1.3 mg/dL', min: 0.7, max: 1.3 }
+            ];
+            
+            parameters.forEach(param => {
+                if (param.reverse) {
+                    param.status = param.value >= param.min ? 'normal' : 'low';
+                } else {
+                    if (param.value >= param.min && param.value <= param.max) {
+                        param.status = 'normal';
+                    } else if (param.value > param.max) {
+                        param.status = 'high';
+                    } else {
+                        param.status = 'low';
+                    }
+                }
+            });
+            
+            return {
+                parameters: parameters,
+                recommendations: generateRecommendations(parameters)
+            };
+        }
+
+        function generateRecommendations(parameters) {
+            const recs = {
+                english: [],
+                hindi: [],
+                kannada: []
+            };
+            
+            parameters.forEach(param => {
+                if (param.status !== 'normal') {
+                    if (param.name === 'Blood Glucose' && param.status === 'high') {
+                        recs.english.push('🍎 Diet: Reduce sugar intake and focus on a low-glycemic diet to manage blood glucose levels');
+                        recs.hindi.push('🍎 आहार: रक्त शर्करा को नियंत्रित करने के लिए चीनी का सेवन कम करें और कम ग्लाइसेमिक आहार पर ध्यान दें');
+                        recs.kannada.push('🍎 ಆಹಾರ: ರಕ್ತದ ಗ್ಲೂಕೋಸ್ ಮಟ್ಟವನ್ನು ನಿರ್ವಹಿಸಲು ಸಕ್ಕರೆ ಸೇವನೆಯನ್ನು ಕಡಿಮೆ ಮಾಡಿ');
+                    }
+                    if ((param.name === 'Total Cholesterol' || param.name === 'LDL Cholesterol') && param.status === 'high') {
+                        recs.english.push('🥗 Nutrition: Increase intake of omega-3 fatty acids and fiber-rich foods to lower LDL cholesterol');
+                        recs.hindi.push('🥗 पोषण: LDL कोलेस्ट्रॉल कम करने के लिए ओमेगा-3 फैटी एसिड और फाइबर युक्त खाद्य पदार्थों का सेवन बढ़ाएं');
+                        recs.kannada.push('🥗 ಪೋಷಣೆ: LDL ಕೊಲೆಸ್ಟರಾಲ್ ಕಡಿಮೆ ಮಾಡಲು ಒಮೆಗಾ-3 ಮತ್ತು ಫೈಬರ್ ಸಮೃದ್ಧ ಆಹಾರಗಳನ್ನು ಹೆಚ್ಚಿಸಿ');
+                    }
+                    if (param.name === 'HDL Cholesterol' && param.status === 'low') {
+                        recs.english.push('🏃 Exercise: Engage in at least 30 minutes of moderate aerobic exercise daily to improve HDL cholesterol');
+                        recs.hindi.push('🏃 व्यायाम: HDL कोलेस्ट्रॉल बढ़ाने के लिए रोजाना कम से कम 30 मिनट की मध्यम एरोबिक एक्सरसाइज करें');
+                        recs.kannada.push('🏃 ವ್ಯಾಯಾಮ: HDL ಕೊಲೆಸ್ಟರಾಲ್ ಸುಧಾರಿಸಲು ದಿನಕ್ಕೆ 30 ನಿಮಿಷಗಳ ವ್ಯಾಯಾಮ ಮಾಡಿ');
+                    }
+                }
+            });
+            
+            // Add general recommendations
+            recs.english.push('💊 Medication: Consult your doctor about potential treatments');
+            recs.english.push('⚖️ Weight: Maintain healthy body weight through balanced diet and regular physical activity');
+            recs.english.push('🚭 Lifestyle: Avoid smoking and limit alcohol consumption');
+            recs.english.push('🔄 Follow-up: Repeat tests after 3 months');
+            
+            recs.hindi.push('💊 दवा: संभावित उपचार के बारे में अपने डॉक्टर से परामर्श लें');
+            recs.hindi.push('⚖️ वजन: संतुलित आहार और नियमित शारीरिक गतिविधि के माध्यम से स्वस्थ शरीर का वजन बनाए रखें');
+            recs.hindi.push('🚭 जीवनशैली: धूम्रपान से बचें और शराब का सेवन सीमित करें');
+            recs.hindi.push('🔄 फॉलो-अप: 3 महीने बाद टेस्ट दोहराएं');
+            
+            recs.kannada.push('💊 ಔಷಧಿ: ಸಂಭವನೀಯ ಚಿಕಿತ್ಸೆಯ ಬಗ್ಗೆ ವೈದ್ಯರನ್ನು ಸಂಪರ್ಕಿಸಿ');
+            recs.kannada.push('⚖️ ತೂಕ: ಸಮತೋಲಿತ ಆಹಾರ ಮತ್ತು ನಿಯಮಿತ ದೈಹಿಕ ಚಟುವಟಿಕೆಯ ಮೂಲಕ ಆರೋಗ್ಯಕರ ತೂಕವನ್ನು ನಿರ್ವಹಿಸಿ');
+            recs.kannada.push('🚭 ಜೀವನಶೈಲಿ: ಧೂಮಪಾನವನ್ನು ತಪ್ಪಿಸಿ ಮತ್ತು ಮದ್ಯಪಾನವನ್ನು ಸೀಮಿತಗೊಳಿಸಿ');
+            recs.kannada.push('🔄 ಅನುಸರಣೆ: 3 ತಿಂಗಳ ನಂತರ ಪರೀಕ್ಷೆಗಳನ್ನು ಪುನರಾವರ್ತಿಸಿ');
+            
+            return recs;
+        }
+
+        function getSampleData() {
+            return {
+                parameters: [
+                    { name: 'Hemoglobin', nameHindi: 'हीमोग्लोबिन', nameKannada: 'ಹಿಮೋಗ್ಲೋಬಿನ್', value: 13.5, range: '12-16 g/dL', status: 'normal' },
+                    { name: 'WBC Count', nameHindi: 'WBC काउंट', nameKannada: 'WBC ಎಣಿಕೆ', value: 9500, range: '4000-11000 /μL', status: 'normal' },
+                    { name: 'RBC Count', nameHindi: 'RBC काउंट', nameKannada: 'RBC ಎಣಿಕೆ', value: 4.8, range: '4.5-5.5 M/μL', status: 'normal' },
+                    { name: 'Platelet Count', nameHindi: 'प्लेटलेट काउंट', nameKannada: 'ಪ್ಲೇಟ್ಲೆಟ್ ಎಣಿಕೆ', value: 220000, range: '150000-400000 /μL', status: 'normal' },
+                    { name: 'Blood Glucose', nameHindi: 'रक्त शर्करा', nameKannada: 'ರಕ್ತದ ಸಕ್ಕರೆ', value: 145, range: '70-100 mg/dL', status: 'high' },
+                    { name: 'Total Cholesterol', nameHindi: 'कुल कोलेस्ट्रॉल', nameKannada: 'ಒಟ್ಟು ಕೊಲೆಸ್ಟರಾಲ್', value: 225, range: '< 200 mg/dL', status: 'high' },
+                    { name: 'HDL Cholesterol', nameHindi: 'HDL कोलेस्ट्रॉल', nameKannada: 'HDL ಕೊಲೆಸ್ಟರಾಲ್', value: 35, range: '> 40 mg/dL', status: 'low' },
+                    { name: 'LDL Cholesterol', nameHindi: 'LDL कोलेस्ट्रॉल', nameKannada: 'LDL ಕೊಲೆಸ್ಟರಾಲ್', value: 160, range: '< 100 mg/dL', status: 'high' },
+                    { name: 'Triglycerides', nameHindi: 'ट्राइग्लिसराइड्स', nameKannada: 'ಟ್ರೈಗ್ಲಿಸರೈಡ್ಸ್', value: 185, range: '< 150 mg/dL', status: 'high' },
+                    { name: 'Creatinine', nameHindi: 'क्रिएटिनिन', nameKannada: 'ಕ್ರಿಯೇಟಿನೈನ್', value: 1.0, range: '0.7-1.3 mg/dL', status: 'normal' }
+                ],
+                recommendations: {
+                    english: [
+                        '🍎 Diet: Reduce sugar intake and focus on a low-glycemic diet to manage blood glucose levels',
+                        '🏃 Exercise: Engage in at least 30 minutes of moderate aerobic exercise daily to improve HDL cholesterol',
+                        '🥗 Nutrition: Increase intake of omega-3 fatty acids and fiber-rich foods to lower LDL cholesterol',
+                        '💊 Medication: Consult your doctor about potential need for cholesterol-lowering medication',
+                        '⚖️ Weight: Maintain healthy body weight through balanced diet and regular physical activity',
+                        '🚭 Lifestyle: Avoid smoking and limit alcohol consumption',
+                        '🔄 Follow-up: Repeat lipid profile and glucose tests after 3 months'
+                    ],
+                    hindi: [
+                        '🍎 आहार: रक्त शर्करा को नियंत्रित करने के लिए चीनी का सेवन कम करें और कम ग्लाइसेमिक आहार पर ध्यान दें',
+                        '🏃 व्यायाम: HDL कोलेस्ट्रॉल बढ़ाने के लिए रोजाना कम से कम 30 मिनट की मध्यम एरोबिक एक्सरसाइज करें',
+                        '🥗 पोषण: LDL कोलेस्ट्रॉल कम करने के लिए ओमेगा-3 फैटी एसिड और फाइबर युक्त खाद्य पदार्थों का सेवन बढ़ाएं',
+                        '💊 दवा: कोलेस्ट्रॉल कम करने वाली दवा की आवश्यकता के बारे में अपने डॉक्टर से परामर्श लें',
+                        '⚖️ वजन: संतुलित आहार और नियमित शारीरिक गतिविधि के माध्यम से स्वस्थ शरीर का वजन बनाए रखें',
+                        '🚭 जीवनशैली: धूम्रपान से बचें और शराब का सेवन सीमित करें',
+                        '🔄 फॉलो-अप: 3 महीने बाद लिपिड प्रोफाइल और ग्लूकोज टेस्ट दोहराएं'
+                    ],
+                    kannada: [
+                        '🍎 ಆಹಾರ: ರಕ್ತದ ಗ್ಲೂಕೋಸ್ ಮಟ್ಟವನ್ನು ನಿರ್ವಹಿಸಲು ಸಕ್ಕರೆ ಸೇವನೆಯನ್ನು ಕಡಿಮೆ ಮಾಡಿ',
+                        '🏃 ವ್ಯಾಯಾಮ: HDL ಕೊಲೆಸ್ಟರಾಲ್ ಸುಧಾರಿಸಲು ದಿನಕ್ಕೆ 30 ನಿಮಿಷಗಳ ವ್ಯಾಯಾಮ ಮಾಡಿ',
+                        '🥗 ಪೋಷಣೆ: LDL ಕೊಲೆಸ್ಟರಾಲ್ ಕಡಿಮೆ ಮಾಡಲು ಒಮೆಗಾ-3 ಮತ್ತು ಫೈಬರ್ ಸಮೃದ್ಧ ಆಹಾರಗಳನ್ನು ಹೆಚ್ಚಿಸಿ',
+                        '💊 ಔಷಧಿ: ಕೊಲೆಸ್ಟರಾಲ್ ಕಡಿಮೆಗೊಳಿಸುವ ಔಷಧಿಯ ಅಗತ್ಯತೆಯ ಬಗ್ಗೆ ವೈದ್ಯರನ್ನು ಸಂಪರ್ಕಿಸಿ',
+                        '⚖️ ತೂಕ: ಸಮತೋಲಿತ ಆಹಾರ ಮತ್ತು ನಿಯಮಿತ ದೈಹಿಕ ಚಟುವಟಿಕೆಯ ಮೂಲಕ ಆರೋಗ್ಯಕರ ತೂಕವನ್ನು ನಿರ್ವಹಿಸಿ',
+                        '🚭 ಜೀವನಶೈಲಿ: ಧೂಮಪಾನವನ್ನು ತಪ್ಪಿಸಿ ಮತ್ತು ಮದ್ಯಪಾನವನ್ನು ಸೀಮಿತಗೊಳಿಸಿ',
+                        '🔄 ಅನುಸರಣೆ: 3 ತಿಂಗಳ ನಂತರ ಲಿಪಿಡ್ ಪ್ರೊಫೈಲ್ ಮತ್ತು ಗ್ಲೂಕೋಸ್ ಪರೀಕ್ಷೆಗಳನ್ನು ಪುನರಾವರ್ತಿಸಿ'
+                    ]
+                }
+            };
+        }
+
+        function showResults(data) {
+            const t = translations[currentLang];
+            const container = document.getElementById('resultsContainer');
+            
+            // Determine overall status
+            const abnormalCount = data.parameters.filter(p => p.status !== 'normal').length;
+            let overallStatus = '';
+            let overallStatusText = {
+                english: 'Good Health - Minor Attention Needed',
+                hindi: 'अच्छा स्वास्थ्य - मामूली ध्यान की आवश्यकता',
+                kannada: 'ಉತ್ತಮ ಆರೋಗ್ಯ - ಸ್ವಲ್ಪ ಗಮನ ಅಗತ್ಯವಿದೆ'
+            };
+            
+            if (abnormalCount === 0) {
+                overallStatusText = {
+                    english: 'Excellent Health',
+                    hindi: 'उत्कृष्ट स्वास्थ्य',
+                    kannada: 'ಅತ್ಯುತ್ತಮ ಆರೋಗ್ಯ'
+                };
+            } else if (abnormalCount >= 3) {
+                overallStatusText = {
+                    english: 'Moderate Risk - Action Required',
+                    hindi: 'मध्यम जोखिम - कार्रवाई आवश्यक',
+                    kannada: 'ಮಧ್ಯಮ ಅಪಾಯ - ಕ್ರಮ ಅಗತ್ಯವಿದೆ'
+                };
+            }
+            
+            const paramName = (param) => {
+                if (currentLang === 'hindi') return param.nameHindi || param.name;
+                if (currentLang === 'kannada') return param.nameKannada || param.name;
+                return param.name;
+            };
+            
+            container.innerHTML = `
+                <div class="results-header">
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <i class="fas fa-heartbeat" style="font-size: 40px;"></i>
+                        <div>
+                            <h2 class="results-title">${t.overallHealth}</h2>
+                            <p class="overall-status">${overallStatusText[currentLang]}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="results-table">
+                    <div class="table-header">
+                        <i class="fas fa-chart-line" style="margin-right: 10px;"></i>
+                        ${t.parameters}
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Parameter</th>
+                                <th>${t.value}</th>
+                                <th>${t.normalRange}</th>
+                                <th>${t.status}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${data.parameters.map(param => `
+                                <tr>
+                                    <td style="font-weight: 600;">${paramName(param)}</td>
+                                    <td>${param.value}</td>
+                                    <td>${param.range}</td>
+                                    <td>
+                                        <span class="status-badge status-${param.status}">
+                                            ${param.status === 'normal' ? '✓' : '!'} ${t[param.status]}
+                                        </span>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="recommendations-section">
+                    <h2 class="recommendations-title">
+                        <i class="fas fa-heart" style="color: #e74c3c;"></i>
+                        ${t.recommendations}
+                    </h2>
+                    ${data.recommendations[currentLang].map(rec => `
+                        <div class="recommendation-item">${rec}</div>
+                    `).join('')}
+                </div>
+            `;
+            
+            container.style.display = 'block';
+            container.scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
