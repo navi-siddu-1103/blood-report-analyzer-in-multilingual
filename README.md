@@ -12,7 +12,7 @@ A comprehensive web-based application for analyzing blood reports and providing 
 
 ## 🚀 Live Demo
 
-Visit the live application: [Blood Report Analyzer](https://yourusername.github.io/blood-report-analyzer)
+Visit the live application: [Blood Report Analyzer](https://navi-siddu-1103.github.io/blood-report-analyzer-in-multilingual/)
 
 ## 📋 How to Use
 
