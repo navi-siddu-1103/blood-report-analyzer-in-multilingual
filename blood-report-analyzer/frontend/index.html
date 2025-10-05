@@ -791,17 +791,7 @@
 
     <!-- Results Container -->
     <div class="results-container" id="resultsContainer" style="display: none;">
-        <div class="action-buttons">
-            <button class="btn btn-primary" onclick="analyzeNewFile()">
-                <i class="fas fa-plus"></i>
-                <span id="analyzeNewText">Analyze New File</span>
-            </button>
-            <button class="clear-btn" onclick="clearResults()">
-                <i class="fas fa-trash-alt"></i>
-                <span id="clearResultsText">Clear Results</span>
-            </button>
-        </div>
-        <!-- Results will be inserted here -->
+        <!-- Results will be inserted here dynamically -->
     </div>
 
     <!-- Footer -->
@@ -1672,6 +1662,31 @@
             };
             
             container.innerHTML = `
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="analyzeNewFile()">
+                        <i class="fas fa-plus"></i>
+                        <span id="analyzeNewText">${(() => {
+                            const translations = {
+                                english: 'Analyze New File',
+                                hindi: 'नई फ़ाइल का विश्लेषण करें',
+                                kannada: 'ಹೊಸ ಫೈಲ್ ವಿಶ್ಲೇಷಿಸಿ'
+                            };
+                            return translations[currentLang] || 'Analyze New File';
+                        })()}</span>
+                    </button>
+                    <button class="clear-btn" onclick="clearResults()">
+                        <i class="fas fa-trash-alt"></i>
+                        <span id="clearResultsText">${(() => {
+                            const translations = {
+                                english: 'Clear Results',
+                                hindi: 'परिणाम साफ़ करें',
+                                kannada: 'ಫಲಿತಾಂಶಗಳನ್ನು ತೆರವುಗೊಳಿಸಿ'
+                            };
+                            return translations[currentLang] || 'Clear Results';
+                        })()}</span>
+                    </button>
+                </div>
+
                 <div class="results-header">
                     <div style="display: flex; align-items: center; gap: 15px;">
                         <i class="fas fa-heartbeat" style="font-size: 40px;"></i>
@@ -1741,18 +1756,7 @@
         function clearResults() {
             const container = document.getElementById('resultsContainer');
             container.style.display = 'none';
-            container.innerHTML = `
-                <div class="action-buttons">
-                    <button class="btn btn-primary" onclick="analyzeNewFile()">
-                        <i class="fas fa-plus"></i>
-                        <span id="analyzeNewText">Analyze New File</span>
-                    </button>
-                    <button class="clear-btn" onclick="clearResults()">
-                        <i class="fas fa-trash-alt"></i>
-                        <span id="clearResultsText">Clear Results</span>
-                    </button>
-                </div>
-            `;
+            container.innerHTML = '';
             
             // Reset file input
             resetFileInput();
@@ -1789,29 +1793,7 @@
                 translations[currentLang].uploadInstruction || 'Click to upload or drag and drop';
         }
 
-        // Update translations for new buttons
-        function updateTranslations() {
-            document.getElementById('analyzeNewText').textContent = {
-                english: 'Analyze New File',
-                hindi: 'नई फ़ाइल का विश्लेषण करें',
-                kannada: 'ಹೊಸ ಫೈಲ್ ವಿಶ್ಲೇಷಿಸಿ'
-            }[currentLang] || 'Analyze New File';
-            
-            document.getElementById('clearResultsText').textContent = {
-                english: 'Clear Results',
-                hindi: 'परिणाम साफ़ करें',
-                kannada: 'ಫಲಿತಾಂಶಗಳನ್ನು ತೆರವುಗೊಳಿಸಿ'
-            }[currentLang] || 'Clear Results';
-        }
 
-        // Update existing language change handler to include new translations
-        const originalLanguageOptions = document.querySelectorAll('.language-option');
-        originalLanguageOptions.forEach(option => {
-            option.addEventListener('click', function() {
-                // ... existing language change code ...
-                updateTranslations(); // Add this to existing language change handler
-            });
-        });
     </script>
 </body>
 </html>
