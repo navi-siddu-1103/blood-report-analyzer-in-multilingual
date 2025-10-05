@@ -1177,18 +1177,62 @@
         });
 
         function analyzeManualData(data) {
-            const parameters = [
-                { name: 'Hemoglobin', nameHindi: 'हीमोग्लोबिन', nameKannada: 'ಹಿಮೋಗ್ಲೋಬಿನ್', value: data.hemoglobin, range: '12-16 g/dL', min: 12, max: 16 },
-                { name: 'WBC Count', nameHindi: 'WBC काउंट', nameKannada: 'WBC ಎಣಿಕೆ', value: data.wbc, range: '4000-11000 /μL', min: 4000, max: 11000 },
-                { name: 'RBC Count', nameHindi: 'RBC काउंट', nameKannada: 'RBC ಎಣಿಕೆ', value: data.rbc, range: '4.5-5.5 M/μL', min: 4.5, max: 5.5 },
-                { name: 'Platelet Count', nameHindi: 'प्लेटलेट काउंट', nameKannada: 'ಪ್ಲೇಟ್ಲೆಟ್ ಎಣಿಕೆ', value: data.platelets, range: '150000-400000 /μL', min: 150000, max: 400000 },
-                { name: 'Blood Glucose', nameHindi: 'रक्त शर्करा', nameKannada: 'ರಕ್ತದ ಸಕ್ಕರೆ', value: data.glucose, range: '70-100 mg/dL', min: 70, max: 100 },
-                { name: 'Total Cholesterol', nameHindi: 'कुल कोलेस्ट्रॉल', nameKannada: 'ಒಟ್ಟು ಕೊಲೆಸ್ಟರಾಲ್', value: data.cholesterol, range: '< 200 mg/dL', min: 0, max: 200 },
-                { name: 'HDL Cholesterol', nameHindi: 'HDL कोलेस्ट्रॉल', nameKannada: 'HDL ಕೊಲೆಸ್ಟರಾಲ್', value: data.hdl, range: '> 40 mg/dL', min: 40, max: 999, reverse: true },
-                { name: 'LDL Cholesterol', nameHindi: 'LDL कोलेस्ट्रॉल', nameKannada: 'LDL ಕೊಲೆಸ್ಟರಾಲ್', value: data.ldl, range: '< 100 mg/dL', min: 0, max: 100 },
-                { name: 'Triglycerides', nameHindi: 'ट्राइग्लिसराइड्स', nameKannada: 'ಟ್ರೈಗ್ಲಿಸರೈಡ್ಸ್', value: data.triglycerides, range: '< 150 mg/dL', min: 0, max: 150 },
-                { name: 'Creatinine', nameHindi: 'क्रिएटिनिन', nameKannada: 'ಕ್ರಿಯೇಟಿನೈನ್', value: data.creatinine, range: '0.7-1.3 mg/dL', min: 0.7, max: 1.3 }
-            ];
+            const parameters = [];
+            
+            // Add parameters only if they exist in the data
+            if (data.wbc !== undefined) {
+                parameters.push({ name: 'WBC Count', nameHindi: 'WBC काउंट', nameKannada: 'WBC ಎಣಿಕೆ', value: data.wbc, range: '5.00-10.00 X 10³/μL', min: 5.0, max: 10.0 });
+            }
+            if (data.hemoglobin !== undefined) {
+                parameters.push({ name: 'Hemoglobin', nameHindi: 'हीमोग्लोबिन', nameKannada: 'ಹಿಮೋಗ್ಲೋಬಿನ್', value: data.hemoglobin, range: '13.5-16.5 g/dL', min: 13.5, max: 16.5 });
+            }
+            if (data.rbc !== undefined) {
+                parameters.push({ name: 'RBC Count', nameHindi: 'RBC काउंट', nameKannada: 'RBC ಎಣಿಕೆ', value: data.rbc, range: '4.00-5.20 X 10⁶/μL', min: 4.0, max: 5.2 });
+            }
+            if (data.hct !== undefined) {
+                parameters.push({ name: 'Hematocrit', nameHindi: 'हेमैटोक्रिट', nameKannada: 'ಹೆಮಟೊಕ್ರಿಟ್', value: data.hct, range: '35.00-45.00 %', min: 35.0, max: 45.0 });
+            }
+            if (data.mcv !== undefined) {
+                parameters.push({ name: 'MCV', nameHindi: 'MCV', nameKannada: 'MCV', value: data.mcv, range: '77.0-95.0 fL', min: 77.0, max: 95.0 });
+            }
+            if (data.mch !== undefined) {
+                parameters.push({ name: 'MCH', nameHindi: 'MCH', nameKannada: 'MCH', value: data.mch, range: '25.0-33.0 pg', min: 25.0, max: 33.0 });
+            }
+            if (data.mchc !== undefined) {
+                parameters.push({ name: 'MCHC', nameHindi: 'MCHC', nameKannada: 'MCHC', value: data.mchc, range: '31.0-37.0 g/dL', min: 31.0, max: 37.0 });
+            }
+            if (data.rdw !== undefined) {
+                parameters.push({ name: 'RDW-CV', nameHindi: 'RDW-CV', nameKannada: 'RDW-CV', value: data.rdw, range: '11.6-14.0 %', min: 11.6, max: 14.0 });
+            }
+            if (data.plt !== undefined) {
+                parameters.push({ name: 'Platelet Count', nameHindi: 'प्लेटलेट काउंट', nameKannada: 'ಪ್ಲೇಟ್ಲೆಟ್ ಎಣಿಕೆ', value: data.plt, range: '150-400 X 10³/μL', min: 150, max: 400 });
+            }
+            if (data.mpv !== undefined) {
+                parameters.push({ name: 'MPV', nameHindi: 'MPV', nameKannada: 'MPV', value: data.mpv, range: '7.5-8.3 fL', min: 7.5, max: 8.3 });
+            }
+            
+            // Legacy support for old parameter names
+            if (data.platelets !== undefined && data.plt === undefined) {
+                parameters.push({ name: 'Platelet Count', nameHindi: 'प्लेटलेट काउंट', nameKannada: 'ಪ್ಲೇಟ್ಲೆಟ್ ಎಣಿಕೆ', value: data.platelets, range: '150000-400000 /μL', min: 150000, max: 400000 });
+            }
+            if (data.glucose !== undefined) {
+                parameters.push({ name: 'Blood Glucose', nameHindi: 'रक्त शर्करा', nameKannada: 'ರಕ್ತದ ಸಕ್ಕರೆ', value: data.glucose, range: '70-100 mg/dL', min: 70, max: 100 });
+            }
+            if (data.cholesterol !== undefined) {
+                parameters.push({ name: 'Total Cholesterol', nameHindi: 'कुल कोलेस्ट्रॉल', nameKannada: 'ಒಟ್ಟು ಕೊಲೆಸ್ಟರಾಲ್', value: data.cholesterol, range: '< 200 mg/dL', min: 0, max: 200 });
+            }
+            if (data.hdl !== undefined) {
+                parameters.push({ name: 'HDL Cholesterol', nameHindi: 'HDL कोलेस्ट्रॉल', nameKannada: 'HDL ಕೊಲೆಸ್ಟರಾಲ್', value: data.hdl, range: '> 40 mg/dL', min: 40, max: 999, reverse: true });
+            }
+            if (data.ldl !== undefined) {
+                parameters.push({ name: 'LDL Cholesterol', nameHindi: 'LDL कोलेस्ट्रॉल', nameKannada: 'LDL ಕೊಲೆಸ್ಟರಾಲ್', value: data.ldl, range: '< 100 mg/dL', min: 0, max: 100 });
+            }
+            if (data.triglycerides !== undefined) {
+                parameters.push({ name: 'Triglycerides', nameHindi: 'ट्राइग्लिसराइड्स', nameKannada: 'ಟ್ರೈಗ್ಲಿಸರೈಡ್ಸ್', value: data.triglycerides, range: '< 150 mg/dL', min: 0, max: 150 });
+            }
+            if (data.creatinine !== undefined) {
+                parameters.push({ name: 'Creatinine', nameHindi: 'क्रिएटिनिन', nameKannada: 'ಕ್ರಿಯೇಟಿನೈನ್', value: data.creatinine, range: '0.7-1.3 mg/dL', min: 0.7, max: 1.3 });
+            }
             
             parameters.forEach(param => {
                 if (param.reverse) {
@@ -1419,6 +1463,15 @@
             const triglycerides = seededRandomInt(100, 250, 9);
             const creatinine = seededRandom(0.6, 1.5, 10);
             
+            // Generate status indicators
+            const hbStatus = hb < 13.5 ? 'L ' : (hb > 16.5 ? 'H ' : '');
+            const mchcValue = seededRandom(30, 37, 14);
+            const mchcStatus = mchcValue < 31.0 ? 'L ' : (mchcValue > 37.0 ? 'H ' : '');
+            const rdwValue = seededRandom(11.6, 16, 15);
+            const rdwStatus = rdwValue > 14.0 ? 'H ' : '';
+            const mpvValue = seededRandom(7.5, 9.5, 16);
+            const mpvStatus = mpvValue > 8.3 ? 'H ' : '';
+            
             return `CLINICAL HAEMATOLOGY
             CBC 6 Part Diff / Complete Blood Counts
             
@@ -1427,28 +1480,49 @@
             WBC / Total Leucocyte Count         ${(wbc/1000).toFixed(2)}           X 10³ / μL      5.00 - 10.00
             Method:Flow Cytometry
             
-            HGB / Haemoglobin                   ${hb}           g/dL            13.5 - 16.5
+            Lymphocytes Percentage              ${seededRandom(25, 54, 17).toFixed(1)}           %               25.0 - 54.0
+            Method:Flow Cytometry
+            
+            Neutrophils Percentage              ${seededRandom(40, 75, 18).toFixed(1)}           %               40.0 - 75.0
+            Method:Flow Cytometry
+            
+            Monocytes Percentage                ${seededRandom(2, 10, 19).toFixed(1)}           %               2.0 - 10.0
+            Method:Flow Cytometry
+            
+            Eosinophils Percentage              ${seededRandom(1, 6, 20).toFixed(1)}           %               1.0 - 6.0
+            Method:Flow Cytometry
+            
+            Basophils Percentage                ${seededRandom(0.1, 2, 21).toFixed(1)}           %               0.1 - 2.0
+            Method:Flow Cytometry
+            
+            HGB / Haemoglobin                   ${hbStatus}${hb}           g/dL            13.5 - 16.5
             Method:SLS-Hemoglobin Method
             
             RBC / Total RBC Count               ${rbc}           X 10⁶/μL       4.00 - 5.20
             Method:Flow Cytometry
             
-            HCT / Hematocrit                    ${seededRandom(35, 45, 11)}           %               35.00 - 45.00
+            HCT / Hematocrit                    ${seededRandom(35, 45, 11).toFixed(2)}           %               35.00 - 45.00
             Method:Flow Cytometry
             
-            MCV / Mean Corpuscular Volume       ${seededRandom(77, 95, 12)}           fL              77.0 - 95.0
+            MCV / Mean Corpuscular Volume       ${seededRandom(77, 95, 12).toFixed(1)}           fL              77.0 - 95.0
             Method:Flow Cytometry
             
-            MCH / Mean Corpuscular Hemoglobin   ${seededRandom(25, 33, 13)}           pg              25.0 - 33.0
+            MCH / Mean Corpuscular Hemoglobin   ${seededRandom(25, 33, 13).toFixed(1)}           pg              25.0 - 33.0
             Method:Flow Cytometry
             
-            MCHC / Mean Corp. Hemo. Conc        ${seededRandom(31, 37, 14)}           g/dL            31.0 - 37.0
+            MCHC / Mean Corp. Hemo. Conc        ${mchcStatus}${mchcValue.toFixed(1)}           g/dL            31.0 - 37.0
             Method:Flow Cytometry
             
-            RDW-CV / Red Cell Distribution Width ${seededRandom(11.6, 14, 15)}           %               11.6 - 14.0
+            RDW-CV / Red Cell Distribution Width - CV ${rdwStatus}${rdwValue.toFixed(1)}           %               11.6 - 14.0
             Method:Flow Cytometry
             
             PLT / Platelet Count                ${platelets}         X 10³ / μL      150 - 400
+            Method:Flow Cytometry
+            
+            MPV / Mean Platelet Volume          ${mpvStatus}${mpvValue.toFixed(1)}           fL              7.5 - 8.3
+            Method:Flow Cytometry
+            
+            PCT / Plateletcrit                  ${seededRandom(0.19, 0.39, 22).toFixed(2)}           %               0.19 - 0.39
             Method:Flow Cytometry
             
             Technology:
@@ -1574,24 +1648,24 @@
             // Enhanced regular expressions optimized for real CBC reports
             const patterns = {
                 hemoglobin: [
-                    /(?:hgb?|hemoglobin|haemoglobin)\s*(?:\/\s*)?(?:h[ae]moglobin)?\s*(?:method[^\n]*)?\s*(?:l\s+)?(\d+\.?\d*)\s*(?:g\/dl)?/i,
-                    /(?:hgb?|hemoglobin)\s*(?:count)?\s*(?:method[^\n]*)?\s*(\d+\.?\d*)\s*g\/dl/i,
-                    /(\d+\.?\d*)\s*g\/dl\s*(?:13\.5\s*-\s*16\.5)?/i,
-                    /hb[^\d]*(\d+\.?\d*)/i,
-                    /(?:l\s+)?(\d+\.?\d*)\s*g\/dl/i
+                    /(?:hgb?|hgb|haemoglobin)\s*(?:\/\s*haemoglobin)?\s*(?:method[^\n]*)?\s*(?:l\s+)?(\d+\.\d+)\s*g\/dl/i,
+                    /(?:l\s+)?(\d+\.\d+)\s*g\/dl/i,
+                    /hgb[^\d]*(?:l\s+)?(\d+\.\d+)/i,
+                    /haemoglobin[^\d]*(?:l\s+)?(\d+\.\d+)/i,
+                    /(?:hgb?|hemoglobin)\s*(?:method[^\n]*)?\s*(\d+\.\d+)\s*g\/dl/i
                 ],
                 wbc: [
-                    /(?:wbc|white blood cell|total leucocyte count)\s*(?:\/\s*total\s*leucocyte\s*count)?\s*(?:method[^\n]*)?\s*(\d+\.?\d*)\s*(?:x\s*10³?[\/\s]*μl|x\s*10³|x10³)?/i,
-                    /total\s+leucocyte\s+count\s*(?:method[^\n]*)?\s*(\d+\.?\d*)/i,
-                    /(\d+\.?\d*)\s*x\s*10³?[\/\s]*μl\s*(?:5\.00\s*-\s*10\.00)?/i,
-                    /wbc[^\d]*(\d+\.?\d*)/i,
-                    /(\d+\.?\d*)\s+x\s+10³\s*\/\s*μl/i
+                    /(?:wbc|white blood cell|total leucocyte count)\s*(?:\/\s*total\s*leucocyte\s*count)?\s*(?:method[^\n]*)?\s*(\d+\.\d+)\s*(?:x\s*10³[\/\s]*μl|x\s*10³|x10³)?/i,
+                    /wbc[^\d]*(\d+\.\d+)\s*x\s*10³/i,
+                    /(\d+\.\d+)\s*x\s*10³\s*[/\s]*\s*μl/i,
+                    /total\s+leucocyte\s+count\s*(?:method[^\n]*)?\s*(\d+\.\d+)/i,
+                    /(\d+\.\d+)\s+x\s+10³\s*\/\s*μl/i
                 ],
                 rbc: [
-                    /(?:rbc|red blood cell|total rbc count)\s*(?:\/\s*total\s*rbc\s*count)?\s*(?:method[^\n]*)?\s*(\d+\.?\d*)\s*(?:x\s*10⁶?\/μl|x\s*10⁶|x10⁶)?/i,
-                    /total\s+rbc\s+count\s*(?:method[^\n]*)?\s*(\d+\.?\d*)/i,
-                    /(\d+\.?\d*)\s*x\s*10⁶?\/μl\s*(?:4\.00\s*-\s*5\.20)?/i,
-                    /rbc[^\d]*(\d+\.?\d*)/i
+                    /(?:rbc|red blood cell|total rbc count)\s*(?:\/\s*total\s*rbc\s*count)?\s*(?:method[^\n]*)?\s*(\d+\.\d+)\s*x\s*10⁶\/μl/i,
+                    /rbc[^\d]*(\d+\.\d+)\s*x\s*10⁶/i,
+                    /(\d+\.\d+)\s*x\s*10⁶\/μl/i,
+                    /total\s+rbc\s+count\s*(?:method[^\n]*)?\s*(\d+\.\d+)/i
                 ],
                 platelets: [
                     /(?:plt|platelet count)\s*(?:\/\s*platelet\s*count)?\s*(?:method[^\n]*)?\s*(\d+)\s*(?:x\s*10³?\/μl|x\s*10³|x10³)?/i,
@@ -1636,34 +1710,46 @@
                     /(\d+\.?\d*)\s*mg\/dl.*?creatinine/i
                 ],
                 hct: [
-                    /(?:hct|hematocrit)\s*(?:\/\s*hematocrit)?\s*(?:method[^\n]*)?\s*(\d+\.?\d*)\s*%?/i,
-                    /hematocrit\s*(?:method[^\n]*)?\s*(\d+\.?\d*)/i,
-                    /(\d+\.?\d*)\s*%\s*(?:35\.00\s*-\s*45\.00)?/i,
-                    /hct[^\d]*(\d+\.?\d*)/i
+                    /(?:hct|hematocrit)\s*(?:\/\s*hematocrit)?\s*(?:method[^\n]*)?\s*(\d+\.\d+)\s*%/i,
+                    /hct[^\d]*(\d+\.\d+)/i,
+                    /(\d+\.\d+)\s*%\s*(?:35\.00\s*-\s*45\.00)?/i,
+                    /hematocrit\s*(?:method[^\n]*)?\s*(\d+\.\d+)/i
                 ],
                 mcv: [
-                    /(?:mcv|mean corpuscular volume)\s*(?:\/\s*mean\s*corpuscular\s*volume)?\s*(?:method[^\n]*)?\s*(\d+\.?\d*)\s*(?:fl)?/i,
-                    /mean\s+corpuscular\s+volume\s*(?:method[^\n]*)?\s*(\d+\.?\d*)/i,
-                    /(\d+\.?\d*)\s*fl\s*(?:77\.0\s*-\s*95\.0)?/i,
-                    /mcv[^\d]*(\d+\.?\d*)/i
+                    /(?:mcv|mean corpuscular volume)\s*(?:\/\s*mean\s*corpuscular\s*volume)?\s*(?:method[^\n]*)?\s*(\d+\.\d+)\s*fl/i,
+                    /mcv[^\d]*(\d+\.\d+)/i,
+                    /(\d+\.\d+)\s*fl\s*(?:77\.0\s*-\s*95\.0)?/i,
+                    /mean\s+corpuscular\s+volume\s*(?:method[^\n]*)?\s*(\d+\.\d+)/i
                 ],
                 mch: [
-                    /(?:mch|mean corpuscular hemoglobin)\s*(?:\/\s*mean\s*corpuscular\s*hemoglobin)?\s*(?:method[^\n]*)?\s*(\d+\.?\d*)\s*(?:pg)?/i,
-                    /mean\s+corpuscular\s+hemoglobin\s*(?:method[^\n]*)?\s*(\d+\.?\d*)/i,
-                    /(\d+\.?\d*)\s*pg\s*(?:25\.0\s*-\s*33\.0)?/i,
-                    /mch[^\d]*(\d+\.?\d*)/i
+                    /(?:mch|mean corpuscular hemoglobin)\s*(?:\/\s*mean\s*corpuscular\s*hemoglobin)?\s*(?:method[^\n]*)?\s*(\d+\.\d+)\s*pg/i,
+                    /mch[^\d]*(\d+\.\d+)/i,
+                    /(\d+\.\d+)\s*pg\s*(?:25\.0\s*-\s*33\.0)?/i,
+                    /mean\s+corpuscular\s+hemoglobin\s*(?:method[^\n]*)?\s*(\d+\.\d+)/i
                 ],
                 mchc: [
-                    /(?:mchc|mean corp[^\n]*hemo[^\n]*conc)\s*(?:method[^\n]*)?\s*(?:l)?\s*(\d+\.?\d*)\s*(?:g\/dl)?/i,
-                    /mean\s+corp[^\n]*hemoglobin\s+conc[^\n]*\s*(\d+\.?\d*)/i,
-                    /(\d+\.?\d*)\s*g\/dl\s*(?:31\.0\s*-\s*37\.0)?/i,
-                    /mchc[^\d]*(\d+\.?\d*)/i
+                    /(?:mchc|mean corp[^\n]*hemo[^\n]*conc)\s*(?:method[^\n]*)?\s*(?:l\s+)?(\d+\.\d+)\s*g\/dl/i,
+                    /(?:l\s+)?(\d+\.\d+)\s*g\/dl.*mchc/i,
+                    /mchc[^\d]*(?:l\s+)?(\d+\.\d+)/i,
+                    /mean\s+corp[^\n]*hemoglobin\s+conc[^\n]*\s*(\d+\.\d+)/i
                 ],
                 rdw: [
-                    /(?:rdw-cv|rdw|red cell distribution width)\s*(?:\/\s*red\s*cell\s*distribution\s*width)?\s*(?:method[^\n]*)?\s*(?:h)?\s*(\d+\.?\d*)\s*%?/i,
-                    /red\s+cell\s+distribution\s+width[^\n]*\s*(\d+\.?\d*)/i,
-                    /(\d+\.?\d*)\s*%\s*(?:11\.6\s*-\s*14\.0)?/i,
-                    /rdw[^\d]*(\d+\.?\d*)/i
+                    /(?:rdw-cv|rdw)\s*(?:\/\s*red\s*cell\s*distribution\s*width)?\s*(?:method[^\n]*)?\s*(?:h\s+)?(\d+\.\d+)\s*%/i,
+                    /(?:h\s+)?(\d+\.\d+)\s*%.*rdw/i,
+                    /rdw[^\d]*(?:h\s+)?(\d+\.\d+)/i,
+                    /red\s+cell\s+distribution\s+width[^\n]*\s*(\d+\.\d+)/i
+                ],
+                plt: [
+                    /(?:plt|platelet count)\s*(?:\/\s*platelet\s*count)?\s*(?:method[^\n]*)?\s*(\d+)\s*x\s*10³\s*\/\s*μl/i,
+                    /plt[^\d]*(\d+)\s*x\s*10³/i,
+                    /(\d+)\s*x\s*10³\s*\/\s*μl/i,
+                    /platelet\s+count\s*(?:method[^\n]*)?\s*(\d+)/i
+                ],
+                mpv: [
+                    /(?:mpv|mean platelet volume)\s*(?:\/\s*mean\s*platelet\s*volume)?\s*(?:method[^\n]*)?\s*(?:h\s+)?(\d+\.\d+)\s*fl/i,
+                    /(?:h\s+)?(\d+\.\d+)\s*fl.*mpv/i,
+                    /mpv[^\d]*(?:h\s+)?(\d+\.\d+)/i,
+                    /mean\s+platelet\s+volume\s*(?:method[^\n]*)?\s*(\d+\.\d+)/i
                 ]
             };
             
